@@ -1,4 +1,4 @@
-namespace BannerlordUnits.WebAPI.Models;
+namespace BannerlordUnits.Models;
 
 public interface IEntity<TId>
 {

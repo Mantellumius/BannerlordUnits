@@ -1,3 +1,5 @@
+using BannerlordUnits.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 RegisterServices(builder.Services);
 var app = builder.Build();
@@ -17,6 +19,14 @@ void RegisterServices(IServiceCollection services)
     });
     services.AddScoped<ITroopsRepository<Troop>, TroopsRepository>();
     services.AddTransient<IApi, TroopsApi>();
+    services.AddCors(options =>
+    {
+        options.AddPolicy(name: "AllowBlazorOrigin",
+            builder =>
+            {
+                builder.WithOrigins("https://localhost:7297", "http://localhost:5294");
+            });
+    });
 }
 
 void Configure(WebApplication app)
@@ -27,5 +37,6 @@ void Configure(WebApplication app)
         app.UseSwaggerUI();
     }
 
+    app.UseCors("AllowBlazorOrigin");
     app.UseHttpsRedirection();
 }

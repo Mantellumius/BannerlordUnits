@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannerlordUnits.WebAPI", "B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannerlordUnits.Presentation", "BannerlordUnits.Presentation\BannerlordUnits.Presentation.csproj", "{24882B8F-47A2-49C4-AF2C-68D047BC5C72}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannerlordUnits.Models", "BannerlordUnits.Models\BannerlordUnits.Models.csproj", "{36A08E87-47B8-4DC8-82CD-FAD055545934}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{24882B8F-47A2-49C4-AF2C-68D047BC5C72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24882B8F-47A2-49C4-AF2C-68D047BC5C72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24882B8F-47A2-49C4-AF2C-68D047BC5C72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36A08E87-47B8-4DC8-82CD-FAD055545934}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36A08E87-47B8-4DC8-82CD-FAD055545934}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36A08E87-47B8-4DC8-82CD-FAD055545934}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36A08E87-47B8-4DC8-82CD-FAD055545934}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

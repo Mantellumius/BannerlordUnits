@@ -1,3 +1,5 @@
+using BannerlordUnits.Models;
+
 namespace BannerlordUnits.WebAPI.Apis;
 
 public class TroopsApi : IApi

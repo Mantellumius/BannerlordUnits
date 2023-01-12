@@ -1,3 +1,5 @@
+using BannerlordUnits.Models;
+
 namespace BannerlordUnits.WebAPI.DataAccess;
 
 public class TroopsContext : DbContext

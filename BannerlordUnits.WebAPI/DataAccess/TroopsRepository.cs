@@ -1,4 +1,4 @@
-using BannerlordUnits.WebAPI.Models;
+using BannerlordUnits.Models;
 
 namespace BannerlordUnits.WebAPI.DataAccess;
 

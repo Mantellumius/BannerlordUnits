@@ -1,4 +1,4 @@
-namespace BannerlordUnits.WebAPI.Models;
+namespace BannerlordUnits.Models;
 
 [PrimaryKey(nameof(Name))]
 public class CustomTroop : ITroop
