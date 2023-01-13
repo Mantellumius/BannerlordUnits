@@ -1,0 +1,94 @@
+@page "/Troops/CompareTroops"
+@inject HttpClient HttpClient
+
+<MudStack Row="true" Justify="Justify.SpaceAround" AlignItems="AlignItems.Center">
+    @if (troop1 is not null)
+    {
+        <MudCard Style="width: 400px">
+            <MudCardHeader>
+                <MudAutocomplete T="Troop" Label="Troop name" @bind-Value="troop1"
+                                 SearchFunc="@Search" ToStringFunc="@(e => e?.Name)"
+                                 ShowProgressIndicator="true"/>
+            </MudCardHeader>
+            <MudCardMedia Image="@troop1.ImageUrl" Height="700" Class="w-100"/>
+            <MudCardContent>
+                <MudText Typo="Typo.body1">Tier: @troop1.Tier</MudText>
+                <MudText Typo="Typo.body1">Type: @troop1.Type</MudText>
+                <MudText Typo="Typo.body1">Culture: @troop1.Culture</MudText>
+                <MudText Typo="Typo.body1">Wage: @troop1.Wage</MudText>
+            </MudCardContent>
+        </MudCard>
+        <MudStack>
+            <MudText Typo="Typo.subtitle1">One Handed @troop1.OneHanded</MudText>
+            <MudText Typo="Typo.subtitle1">Two Handed @troop1.TwoHanded</MudText>
+            <MudText Typo="Typo.subtitle1">Polearm @troop1.Polearm</MudText>
+            <MudText Typo="Typo.subtitle1">Bow @troop1.Bow</MudText>
+            <MudText Typo="Typo.subtitle1">Crossbow @troop1.Crossbow</MudText>
+            <MudText Typo="Typo.subtitle1">Throwing @troop1.Throwing</MudText>
+            <MudText Typo="Typo.subtitle1">Riding @troop1.Riding</MudText>
+            <MudText Typo="Typo.subtitle1">Athletics @troop1.Athletics</MudText>
+        </MudStack>
+    }
+    @if (troop1 is not null && troop2 is not null)
+    {
+        <MudStack>
+            @CalculateDifference(troop1.OneHanded, troop2.OneHanded)
+            @CalculateDifference(troop1.TwoHanded, troop2.TwoHanded)
+            @CalculateDifference(troop1.Polearm, troop2.Polearm)
+            @CalculateDifference(troop1.Bow, troop2.Bow)
+            @CalculateDifference(troop1.Crossbow, troop2.Crossbow)
+            @CalculateDifference(troop1.Throwing, troop2.Throwing)
+            @CalculateDifference(troop1.Riding, troop2.Riding)
+            @CalculateDifference(troop1.Athletics, troop2.Athletics)
+        </MudStack>
+    }
+
+    @if (troop2 is not null)
+    {
+        <MudStack>
+            <MudText Typo="Typo.subtitle1">@troop2.OneHanded One Handed</MudText>
+            <MudText Typo="Typo.subtitle1">@troop2.TwoHanded Two Handed</MudText>
+            <MudText Typo="Typo.subtitle1">@troop2.Polearm Polearm</MudText>
+            <MudText Typo="Typo.subtitle1">@troop2.Bow Bow</MudText>
+            <MudText Typo="Typo.subtitle1">@troop2.Crossbow Crossbow</MudText>
+            <MudText Typo="Typo.subtitle1">@troop2.Throwing Throwing</MudText>
+            <MudText Typo="Typo.subtitle1">@troop2.Riding Riding</MudText>
+            <MudText Typo="Typo.subtitle1">@troop2.Athletics Athletics</MudText>
+        </MudStack>
+        <MudCard Style="width: 400px">
+            <MudCardHeader>
+                <MudAutocomplete T="Troop" Label="Troop name" @bind-Value="troop2"
+                                 SearchFunc="@Search" ToStringFunc="@(e => e?.Name)"
+                                 ShowProgressIndicator="true"/>
+            </MudCardHeader>
+            <MudCardMedia Image="@troop2.ImageUrl" Height="700" Class="w-100"/>
+            <MudCardContent>
+                <MudText Typo="Typo.body1">Tier: @troop2.Tier</MudText>
+                <MudText Typo="Typo.body1">Type: @troop2.Type</MudText>
+                <MudText Typo="Typo.body1">Culture: @troop2.Culture</MudText>
+                <MudText Typo="Typo.body1">Wage: @troop2.Wage</MudText>
+            </MudCardContent>
+        </MudCard>
+    }
+</MudStack>
+
+@code {
+    Troop? troop1 = new() { Name = "" };
+    Troop? troop2 = new() { Name = "" };
+
+    private async Task<IEnumerable<Troop>?> Search(string name)
+    {
+        return (await HttpClient.GetFromJsonAsync<List<Troop>>($"Troops"))?
+            .Where(troop => troop.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private Color GetColor(int value) => value switch{
+        0 => Color.Default,
+        > 0 => Color.Success,
+        < 0 => Color.Error
+        };
+
+    private RenderFragment CalculateDifference(int value1, int value2) =>
+        @<MudText Typo="Typo.subtitle1" Color="@GetColor(value1 - value2)">@(value1 - value2)</MudText>;
+
+}

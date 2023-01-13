@@ -16,6 +16,16 @@ public class TroopsApi : IApi
             .WithName("GetTroop")
             .WithTags("Getters");
 
+        app.MapGet("/Troops/Amount/{number}", GetAmount)
+            .Produces<List<Troop>>()
+            .WithName("GetAmountTroops")
+            .WithTags("Getters");
+
+        app.MapGet("/Troops/Names", GetNames)
+            .Produces<List<string>>()
+            .WithName("GetAllTroopsNames")
+            .WithTags("Getters");
+
         app.MapPost("/Troops", Post)
             .Accepts<Troop>("application/json")
             .Produces<Troop>(StatusCodes.Status201Created)
@@ -42,6 +52,29 @@ public class TroopsApi : IApi
             .WithTags("Searchers");
     }
 
+
+    private async Task<IResult> Get(ITroopsRepository<Troop> troopsRepository)
+    {
+        return Results.Json((await troopsRepository.GetTroopsAsync()).ToArray());
+    }
+
+    private async Task<IResult> GetAmount(ITroopsRepository<Troop> troopsRepository, int amount)
+    {
+        return Results.Json((await troopsRepository.GetTroopsAsync(amount)).ToArray());
+    }
+
+    private async Task<IResult> GetByName(string name, ITroopsRepository<Troop> troopsRepository)
+    {
+        return await troopsRepository.GetTroopAsync(name) is Troop troop
+            ? Results.Ok(troop)
+            : Results.NotFound();
+    }
+
+    private async Task<IResult> GetNames(ITroopsRepository<Troop> troopsRepository)
+    {
+        return Results.Ok(await troopsRepository.GetTroopsNamesAsync());
+    }
+
     private IResult SearchByType(string type, ITroopsRepository<Troop> troopsRepository)
     {
         return troopsRepository.SearchByTroopsType(type).ToArray() is IEnumerable<ITroop> result
@@ -56,17 +89,6 @@ public class TroopsApi : IApi
             : Results.NotFound(Array.Empty<Troop>());
     }
 
-    private async Task<IResult> Get(ITroopsRepository<Troop> troopsRepository)
-    {
-        return Results.Json((await troopsRepository.GetTroopsAsync()).ToArray());
-    }
-
-    private async Task<IResult> GetByName(string name, ITroopsRepository<Troop> troopsRepository)
-    {
-        return await troopsRepository.GetTroopAsync(name) is Troop troop
-            ? Results.Ok(troop)
-            : Results.NotFound();
-    }
 
     private async Task<IResult> Post(Troop troop, ITroopsRepository<Troop> troopsRepository)
     {

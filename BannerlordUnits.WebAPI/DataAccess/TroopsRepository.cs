@@ -14,7 +14,8 @@ public class TroopsRepository : ITroopsRepository<Troop>
     }
 
     public Task<List<Troop>> GetTroopsAsync() => _context.Troops.ToListAsync();
-
+    public Task<List<string>> GetTroopsNamesAsync() => _context.Troops.Select(troop => troop.Name).ToListAsync();
+    public Task<List<Troop>> GetTroopsAsync(int amount) => _context.Troops.Take(amount).ToListAsync();
     public async Task<Troop> GetTroopAsync(string name) => (await _context.Troops.FindAsync(name))!;
 
     public IEnumerable<Troop> SearchByTroopsCulture(string culture) =>

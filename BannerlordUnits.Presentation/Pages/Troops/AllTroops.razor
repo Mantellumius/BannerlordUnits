@@ -1,7 +1,7 @@
 @page "/Troops/AllTroops"
 @inject HttpClient HttpClient
 
-<MudTable Items="@_troops" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_isLoading"  ReadOnly="true"
+<MudTable Items="@_troops" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_isLoading" ReadOnly="true"
           LoadingProgressColor="Color.Info" Filter="new Func<Troop, bool>(FilterFunc)" Style="width: fit-content; margin: auto;">
     <ToolBarContent>
         <MudText Typo="Typo.h6" Color="Color.Primary">Troops</MudText>
@@ -14,7 +14,7 @@
     <HeaderContent>
         <MudTh>Image</MudTh>
         <MudTh>
-            <MudTableSortLabel SortBy="new Func<Troop, object>(x => x.Name)">Name</MudTableSortLabel>   
+            <MudTableSortLabel SortBy="new Func<Troop, object>(x => x.Name)">Name</MudTableSortLabel>
         </MudTh>
         <MudTh>
             <MudTableSortLabel SortBy="new Func<Troop, object>(x => x.Tier)">Tier</MudTableSortLabel>
@@ -54,7 +54,9 @@
         </MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Image"><MudImage Src="@context.IconUrl" Width="60" Alt="no image" ObjectFit="ObjectFit.ScaleDown"/></MudTd>
+        <MudTd DataLabel="Image">
+            <MudImage Src="@context.ImageUrl" Width="60" Alt="no image" ObjectFit="ObjectFit.ScaleDown"/>
+        </MudTd>
         <MudTd DataLabel="Name">@context.Name</MudTd>
         <MudTd DataLabel="Tier">@context.Tier</MudTd>
         <MudTd DataLabel="Type">@context.Type</MudTd>
