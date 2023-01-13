@@ -3,3 +3,5 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+/BannerlordUnits.WebAPI/appsettings.json
+/BannerlordUnits.WebAPI/appsettings.Development.json
