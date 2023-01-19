@@ -1,3 +1,5 @@
+using BannerlordUnits.WebAPI.DataAccess.Repositories;
+
 namespace BannerlordUnits.WebAPI.Apis;
 
 public class TroopsApi : IApi
@@ -50,60 +52,60 @@ public class TroopsApi : IApi
             .WithTags("Searchers");
     }
 
-    private async Task<IResult> Get(ITroopsRepository<Troop> troopsRepository)
+    private async Task<IResult> Get(IRepository<Troop> troopsRepository)
     {
-        return Results.Json((await troopsRepository.GetTroopsAsync()).ToArray());
+        return Results.Json((await troopsRepository.GetAllAsync()).ToArray());
     }
 
-    private async Task<IResult> GetAmount(ITroopsRepository<Troop> troopsRepository, int amount)
+    private async Task<IResult> GetAmount(IRepository<Troop> troopsRepository, int amount)
     {
-        return Results.Json((await troopsRepository.GetTroopsAsync(amount)).ToArray());
+        return Results.Json((await troopsRepository.GetAmountAsync(amount)).ToArray());
     }
 
-    private async Task<IResult> GetByName(string name, ITroopsRepository<Troop> troopsRepository)
+    private async Task<IResult> GetByName(string name, IRepository<Troop> troopsRepository)
     {
-        return await troopsRepository.GetTroopAsync(name) is Troop troop
+        return await troopsRepository.GetByNameAsync(name) is Troop troop
             ? Results.Ok(troop)
             : Results.NotFound();
     }
     
     [Authorize]
-    private async Task<IResult> GetNames(ITroopsRepository<Troop> troopsRepository)
+    private async Task<IResult> GetNames(IRepository<Troop> troopsRepository)
     {
         return Results.Ok(await troopsRepository.GetTroopsNamesAsync());
     }
 
-    private IResult SearchByType(string type, ITroopsRepository<Troop> troopsRepository)
+    private IResult SearchByType(string type, IRepository<Troop> troopsRepository)
     {
         return troopsRepository.SearchByTroopsType(type).ToArray() is IEnumerable<ITroop> result
             ? Results.Ok(result)
             : Results.NotFound(Array.Empty<Troop>());
     }
 
-    private IResult SearchByCulture(string culture, ITroopsRepository<Troop> troopsRepository)
+    private IResult SearchByCulture(string culture, IRepository<Troop> troopsRepository)
     {
         return troopsRepository.SearchByTroopsCulture(culture).ToArray() is IEnumerable<ITroop> result
             ? Results.Ok(result)
             : Results.NotFound(Array.Empty<Troop>());
     }
 
-    private async Task<IResult> Post(Troop troop, ITroopsRepository<Troop> troopsRepository)
+    private async Task<IResult> Post(Troop troop, IRepository<Troop> troopsRepository)
     {
-        await troopsRepository.InsertTroopAsync(troop);
+        await troopsRepository.InsertAsync(troop);
         await troopsRepository.SaveAsync();
         return Results.Created($"/Troops/{troop.Name}", troop);
     }
 
-    private async Task<IResult> Put(Troop troop, ITroopsRepository<Troop> troopsRepository)
+    private async Task<IResult> Put(Troop troop, IRepository<Troop> troopsRepository)
     {
-        await troopsRepository.UpdateTroopAsync(troop);
+        await troopsRepository.UpdateAsync(troop);
         await troopsRepository.SaveAsync();
         return Results.NoContent();
     }
 
-    private async Task<IResult> Delete(string name, ITroopsRepository<Troop> troopsRepository)
+    private async Task<IResult> Delete(string name, IRepository<Troop> troopsRepository)
     {
-        await troopsRepository.DeleteTroopAsync(name);
+        await troopsRepository.DeleteAsync(name);
         await troopsRepository.SaveAsync();
         return Results.NoContent();
     }

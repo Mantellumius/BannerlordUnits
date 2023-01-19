@@ -3,6 +3,7 @@ using System;
 using BannerlordUnits.WebAPI.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BannerlordUnits.WebAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class UnitsContextModelSnapshot : ModelSnapshot
+    [Migration("20230119131615_removeCraftingFromCustomTroop")]
+    partial class removeCraftingFromCustomTroop
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,79 +24,6 @@ namespace BannerlordUnits.WebAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("BannerlordUnits.Models.Companion", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Athletics")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("AuthorId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Bow")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Charm")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Crafting")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Crossbow")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Culture")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Engineering")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Leadership")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Medicine")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OneHanded")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Polearm")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Riding")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Roguery")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Scouting")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Steward")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Tactics")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Throwing")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Trade")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TwoHanded")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("Companions");
-                });
 
             modelBuilder.Entity("BannerlordUnits.Models.CustomTroop", b =>
                 {

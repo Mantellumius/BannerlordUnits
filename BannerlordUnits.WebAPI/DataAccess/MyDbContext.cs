@@ -8,4 +8,5 @@ public class MyDbContext : DbContext
 
     public DbSet<Troop> Troops { get; set; }
     public DbSet<CustomTroop> CustomTroops { get; set; }
+    public DbSet<Companion> Companions { get; set; }
 }

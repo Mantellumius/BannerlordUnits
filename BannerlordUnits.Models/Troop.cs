@@ -3,13 +3,13 @@ namespace BannerlordUnits.Models;
 [PrimaryKey(nameof(Name))]
 public class Troop : ITroop
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
     public int Tier { get; set; }
     public string? Type { get; set; }
     public string? Culture { get; set; }
     public int Wage { get; set; }
-    public string? ImageUrl { get; set; }
-    public string? IconUrl { get; set; }
+    public string? ImageUrl { get; set; } = "";
+    public string? IconUrl { get; set; } = "";
     public int OneHanded { get; set; }
     public int TwoHanded { get; set; }
     public int Polearm { get; set; }

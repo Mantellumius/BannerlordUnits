@@ -88,16 +88,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // var tokenResult = await TokenProvider.RequestAccessToken();
-        // if (tokenResult.TryGetToken(out var token))
-        // {
-        //     var requestMessage = new HttpRequestMessage()
-        //     {
-        //         Method = new HttpMethod("GET"),
-        //         RequestUri = new Uri("https://localhost:10000/api/TodoItems"),
-        //     };
-        //     HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
-        // }
         _troops = await HttpClient.GetFromJsonAsync<Troop[]>("/Troops");
         _isLoading = false;
     }

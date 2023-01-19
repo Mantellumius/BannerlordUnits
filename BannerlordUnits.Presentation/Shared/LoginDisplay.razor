@@ -8,7 +8,7 @@
             <MudNavLink Icon="@Icons.Material.Filled.Logout" IconColor="Color.Inherit" OnClick="BeginLogOut">Log out</MudNavLink>
         </Authorized>
         <NotAuthorized>
-            <MudNavLink href="Authentication/Login" Icon="@Icons.Material.TwoTone.Login" IconColor="Color.Inherit" class="d-inline">Login</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.TwoTone.Login" IconColor="Color.Inherit" class="d-inline" OnClick="BeginLogIn">Login</MudNavLink>
         </NotAuthorized>
     </AuthorizeView>
 </MudStack>
@@ -17,7 +17,12 @@
 
     private void BeginLogOut()
     {
-        Navigation.NavigateToLogout("authentication/logout");
+        Navigation.NavigateToLogout("Authentication/Logout");
+    }
+
+    private void BeginLogIn()
+    {
+        Navigation.NavigateToLogout("Authentication/Login");
     }
 
 }

@@ -1,6 +1,6 @@
 namespace BannerlordUnits.Models;
 
-public interface ITroop
+public interface ITroop : IWithName
 {
     string Name { get; set; }
     int Tier { get; set; }

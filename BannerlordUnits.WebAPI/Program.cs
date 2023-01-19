@@ -1,3 +1,5 @@
+using BannerlordUnits.WebAPI.DataAccess.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 RegisterServices(builder.Services);
 var app = builder.Build();
@@ -15,7 +17,9 @@ void RegisterServices(IServiceCollection services)
             builder.Configuration.GetConnectionString("ElephantSQL"));
         options.UseNpgsql(connectionString);
     });
-    services.AddScoped<ITroopsRepository<Troop>, TroopsRepository>();
+    services.AddScoped<IRepository<Troop>, TroopsRepository>();
+    services.AddScoped<IRepository<CustomTroop>, CustomTroopsRepository>();
+    services.AddScoped<IRepository<Companion>, CompanionsRepository>();
     services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
@@ -40,6 +44,9 @@ void RegisterServices(IServiceCollection services)
         });
     });
     services.AddTransient<IApi, TroopsApi>();
+    services.AddTransient<IApi, CustomTroopsApi>();
+    services.AddTransient<IApi, CompanionsApi>();
+
     services.AddCors(options =>
     {
         options.AddPolicy("AllowAllOrigins",
