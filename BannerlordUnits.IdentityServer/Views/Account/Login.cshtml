@@ -43,9 +43,13 @@
                             }
 
                             <div>
-                                <p>The default users are alice/bob, password: Pass123$</p>
+                                Don't have an account?
+                                <a asp-controller="Account" asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl"
+                                   class="switch-button">
+                                    Sign up
+                                </a>
                             </div>
-                            <button class="btn btn-primary" name="button" value="login">Login</button>
+                            <button class="btn btn-primary" name="button" value="login">Log in</button>
                             <button class="btn btn-secondary" name="button" value="cancel">Cancel</button>
                         </form>
                     </div>
