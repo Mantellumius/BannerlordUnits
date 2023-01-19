@@ -1,0 +1,81 @@
+@page "/Troops/CreateTroops"
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using System.Net.Http.Headers
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@inject HttpClient HttpClient
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IAccessTokenProvider AccessTokenProvider
+<h3>ClaimsPrincipal Data</h3>
+
+<button @onclick="GetClaimsPrincipalData">Get ClaimsPrincipal Data</button>
+
+<p>@authMessage</p>
+
+@if (claims.Any())
+{
+    <ul>
+        @foreach (var claim in claims)
+        {
+            <li>@claim.Type: @claim.Value</li>
+        }
+        @if (_token != null)
+        {
+            <li>Token: @_token.Value</li>
+        }
+    </ul>
+}
+
+<p>@surnameMessage</p>
+@if (_names != null)
+{
+    @foreach (var name in _names)
+    {
+        <p>Name: @name</p>
+    }
+}
+
+@code {
+    private string authMessage;
+    private string surnameMessage;
+    private IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+    private AccessToken? _token;
+    private string[]? _names;
+    protected override async Task OnInitializedAsync()
+    {
+        var tokenResult = await AccessTokenProvider.RequestAccessToken();
+        if (tokenResult.TryGetToken(out var token))
+        {
+            var requestMessage = new HttpRequestMessage()
+            {
+                Method = new HttpMethod("GET"),
+                RequestUri = new Uri("https://localhost:10000/api/TodoItems"),
+            };
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
+        }
+        _names = await HttpClient.GetFromJsonAsync<string[]>("/Troops/Names");
+    }
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var id = user.Claims.First(claim => claim.Type == "sub").Value;
+        if (user.Identity.IsAuthenticated)
+        {
+            authMessage = $"{user.Identity.Name} is authenticated.";
+            claims = user.Claims;
+            surnameMessage =
+                $"Surname: {user.FindFirst(c => c.Type == ClaimTypes.Surname)?.Value}";
+            var tokenResult = await AccessTokenProvider.RequestAccessToken();
+            tokenResult.TryGetToken(out _token);
+        }
+        else
+        {
+            authMessage = "The user is NOT authenticated.";
+        }
+    }
+
+}

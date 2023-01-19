@@ -8,7 +8,10 @@
         </MudContainer>
     </MudMainContent>
 </MudLayout>
+
 <MudThemeProvider Theme="_currentTheme" />
+<MudSnackbarProvider/>
+
 @code {
     private MudTheme _currentTheme = new MudTheme();
     private bool _sidebarOpen = false;

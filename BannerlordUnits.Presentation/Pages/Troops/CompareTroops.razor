@@ -1,10 +1,10 @@
 @page "/Troops/CompareTroops"
 @inject HttpClient HttpClient
 
-<MudStack Row="true" Justify="Justify.SpaceAround" AlignItems="AlignItems.Center">
+<MudStack Row="true" Justify="Justify.SpaceAround" AlignItems="AlignItems.Center" Spacing="25">
     @if (troop1 is not null)
     {
-        <MudCard Style="width: 400px">
+        <MudCard Style="width: 400px" Elevation="20">
             <MudCardHeader>
                 <MudAutocomplete T="Troop" Label="Troop name" @bind-Value="troop1"
                                  SearchFunc="@Search" ToStringFunc="@(e => e?.Name)"
@@ -55,7 +55,7 @@
             <MudText Typo="Typo.subtitle1">@troop2.Riding Riding</MudText>
             <MudText Typo="Typo.subtitle1">@troop2.Athletics Athletics</MudText>
         </MudStack>
-        <MudCard Style="width: 400px">
+        <MudCard Style="width: 400px" Elevation="20">
             <MudCardHeader>
                 <MudAutocomplete T="Troop" Label="Troop name" @bind-Value="troop2"
                                  SearchFunc="@Search" ToStringFunc="@(e => e?.Name)"

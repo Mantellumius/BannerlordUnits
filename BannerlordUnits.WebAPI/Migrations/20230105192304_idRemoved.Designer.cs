@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BannerlordUnits.WebAPI.Migrations
 {
-    [DbContext(typeof(TroopsContext))]
+    [DbContext(typeof(MyDbContext))]
     [Migration("20230105192304_idRemoved")]
     partial class idRemoved
     {

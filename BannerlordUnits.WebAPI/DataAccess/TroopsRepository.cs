@@ -1,13 +1,11 @@
-using BannerlordUnits.Models;
-
 namespace BannerlordUnits.WebAPI.DataAccess;
 
 public class TroopsRepository : ITroopsRepository<Troop>
 {
-    private readonly TroopsContext _context;
+    private readonly MyDbContext _context;
     private PropertyInfo[] Properties { get; }
 
-    public TroopsRepository(TroopsContext context)
+    public TroopsRepository(MyDbContext context)
     {
         _context = context;
         Properties = typeof(Troop).GetProperties();

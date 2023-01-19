@@ -1,5 +1,3 @@
-using BannerlordUnits.Models;
-
 var builder = WebApplication.CreateBuilder(args);
 RegisterServices(builder.Services);
 var app = builder.Build();
@@ -11,32 +9,65 @@ void RegisterServices(IServiceCollection services)
 {
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen();
-    services.AddDbContext<TroopsContext>(options =>
+    services.AddDbContext<MyDbContext>(options =>
     {
         var connectionString = ConnectionStringBuilder.BuildFrom(
             builder.Configuration.GetConnectionString("ElephantSQL"));
         options.UseNpgsql(connectionString);
     });
     services.AddScoped<ITroopsRepository<Troop>, TroopsRepository>();
+    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.Authority = "https://localhost:5002";
+            options.TokenValidationParameters = new()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            };
+        });
+    services.AddAuthorization(options =>
+    {
+        options.AddPolicy("ApiScope", policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.RequireClaim("scope", "TroopsApi");
+        });
+    });
     services.AddTransient<IApi, TroopsApi>();
     services.AddCors(options =>
     {
-        options.AddPolicy(name: "AllowBlazorOrigin",
+        options.AddPolicy("AllowAllOrigins",
+            builder =>
+                builder.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+        options.AddPolicy("AllowBlazorOrigin",
             builder =>
             {
-                builder.WithOrigins("https://localhost:7297", "http://localhost:5294");
+                builder.WithOrigins("https://localhost:7297", "http://localhost:5294")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
             });
     });
 }
 
 void Configure(WebApplication app)
 {
+    app.UseAuthentication();
+    app.UseAuthorization();
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
         app.UseSwaggerUI();
     }
 
-    app.UseCors("AllowBlazorOrigin");
+    app.UseCors("AllowAllOrigins");
     app.UseHttpsRedirection();
 }

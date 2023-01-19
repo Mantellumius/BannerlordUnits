@@ -1,16 +1,18 @@
-﻿@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+﻿@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inject NavigationManager Navigation
 
-<AuthorizeView>
-    <Authorized>
-        Hello, @context.User.Identity?.Name!
-        <button class="nav-link btn btn-link" @onclick="BeginLogOut">Log out</button>
-    </Authorized>
-    <NotAuthorized>
-        <a href="authentication/login">Log in</a>
-    </NotAuthorized>
-</AuthorizeView>
+<MudStack Row="true">
+    <AuthorizeView>
+        <Authorized>
+            <MudText Color="Color.Inherit" >Hello, @context.User.Identity?.Name!</MudText>
+            <MudNavLink Icon="@Icons.Material.Filled.Logout" IconColor="Color.Inherit" OnClick="BeginLogOut">Log out</MudNavLink>
+        </Authorized>
+        <NotAuthorized>
+            <MudNavLink href="Authentication/Register" Icon="@Icons.Material.TwoTone.Login" IconColor="Color.Inherit" class="d-inline pr-2">Register</MudNavLink>
+            <MudNavLink href="Authentication/Login" Icon="@Icons.Material.TwoTone.Login" IconColor="Color.Inherit" class="d-inline">Login</MudNavLink>
+        </NotAuthorized>
+    </AuthorizeView>
+</MudStack>
 
 @code{
 

@@ -1,19 +1,22 @@
 @page "/Troops/AllTroops"
+@using System.Net.Http.Headers
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inject HttpClient HttpClient
+@inject IAccessTokenProvider TokenProvider
 
 <MudTable Items="@_troops" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_isLoading" ReadOnly="true"
           LoadingProgressColor="Color.Info" Filter="new Func<Troop, bool>(FilterFunc)" Style="width: fit-content; margin: auto;">
     <ToolBarContent>
         <MudText Typo="Typo.h6" Color="Color.Primary">Troops</MudText>
         <MudSpacer/>
-        <MudTextField @bind-Value="searchString" Placeholder="Search"
+        <MudTextField @bind-Value="_searchString" Placeholder="Search"
                       Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
                       IconSize="Size.Medium" Class="mt-0">
         </MudTextField>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh>Image</MudTh>
-        <MudTh>
+        <MudTh>Icon</MudTh>
+        <MudTh Style="min-width: 200px">
             <MudTableSortLabel SortBy="new Func<Troop, object>(x => x.Name)">Name</MudTableSortLabel>
         </MudTh>
         <MudTh>
@@ -54,8 +57,8 @@
         </MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Image">
-            <MudImage Src="@context.ImageUrl" Width="60" Alt="no image" ObjectFit="ObjectFit.ScaleDown"/>
+        <MudTd DataLabel="Icon">
+            <MudImage Src="@context.IconUrl" Width="60" Alt="no image" ObjectFit="ObjectFit.ScaleDown"/>
         </MudTd>
         <MudTd DataLabel="Name">@context.Name</MudTd>
         <MudTd DataLabel="Tier">@context.Tier</MudTd>
@@ -77,7 +80,7 @@
 </MudTable>
 
 @code {
-    private string searchString = "";
+    private string _searchString = "";
     private bool _isLoading = true;
     private bool _showIcon = false;
     private readonly string _infoFormat = "{first_item}-{last_item} of {all_items}";
@@ -85,11 +88,21 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // var tokenResult = await TokenProvider.RequestAccessToken();
+        // if (tokenResult.TryGetToken(out var token))
+        // {
+        //     var requestMessage = new HttpRequestMessage()
+        //     {
+        //         Method = new HttpMethod("GET"),
+        //         RequestUri = new Uri("https://localhost:10000/api/TodoItems"),
+        //     };
+        //     HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
+        // }
         _troops = await HttpClient.GetFromJsonAsync<Troop[]>("/Troops");
         _isLoading = false;
     }
 
-    private bool FilterFunc(Troop troop) => string.IsNullOrWhiteSpace(searchString) ||
-                                            $"{troop.Name} {troop.Culture} {troop.Type} {troop.Tier}".ToLower().Contains(searchString);
+    private bool FilterFunc(Troop troop) => string.IsNullOrWhiteSpace(_searchString) ||
+                                            $"{troop.Name} {troop.Culture} {troop.Type} {troop.Tier}".ToLower().Contains(_searchString, StringComparison.OrdinalIgnoreCase);
 
 }

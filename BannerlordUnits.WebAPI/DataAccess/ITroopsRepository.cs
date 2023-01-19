@@ -1,5 +1,3 @@
-using BannerlordUnits.Models;
-
 namespace BannerlordUnits.WebAPI.DataAccess;
 
 public interface ITroopsRepository<TTroop>

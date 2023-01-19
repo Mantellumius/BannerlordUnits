@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BannerlordUnits.WebAPI.Migrations
 {
-    [DbContext(typeof(TroopsContext))]
+    [DbContext(typeof(MyDbContext))]
     partial class UnitsContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -77,7 +77,7 @@ namespace BannerlordUnits.WebAPI.Migrations
 
                     b.HasKey("Name");
 
-                    b.ToTable("CustomTroops");
+                    b.ToTable("CustomTroops", (string)null);
                 });
 
             modelBuilder.Entity("BannerlordUnits.WebAPI.Models.Troop", b =>
@@ -129,7 +129,7 @@ namespace BannerlordUnits.WebAPI.Migrations
 
                     b.HasKey("Name");
 
-                    b.ToTable("Troops");
+                    b.ToTable("Troops", (string)null);
                 });
 #pragma warning restore 612, 618
         }

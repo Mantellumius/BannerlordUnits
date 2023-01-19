@@ -5,3 +5,5 @@ riderModule.iml
 /_ReSharper.Caches/
 /BannerlordUnits.WebAPI/appsettings.json
 /BannerlordUnits.WebAPI/appsettings.Development.json
+/BannerlordUnits.IdentityServer/appsettings.json
+/BannerlordUnits.IdentityServer/tempkey.jwk

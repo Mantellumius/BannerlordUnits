@@ -1,19 +1,24 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using BannerlordUnits.Presentation;
+using Microsoft.Extensions.DependencyInjection;
 using MudBlazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
+
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7063/") });
-//builder.HostEnvironment.BaseAddress
+builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri("https://localhost:6001/") });
+
 builder.Services.AddOidcAuthentication(options =>
 {
     // Configure your authentication provider options here.
     // For more information, see https://aka.ms/blazor-standalone-auth
-    builder.Configuration.Bind("Local", options.ProviderOptions);
+    options.AuthenticationPaths.RemoteRegisterPath = "https://localhost:5002/Account/Register";
+    builder.Configuration.Bind("IdentityServer", options.ProviderOptions);
+    options.ProviderOptions.DefaultScopes.Add("TroopsApi");
 });
+builder.Services.AddApiAuthorization();
 builder.Services.AddMudServices();
-await builder.Build().RunAsync();
+builder.Build().RunAsync();

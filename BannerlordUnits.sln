@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannerlordUnits.Presentatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannerlordUnits.Models", "BannerlordUnits.Models\BannerlordUnits.Models.csproj", "{36A08E87-47B8-4DC8-82CD-FAD055545934}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannerlordUnits.IdentityServer", "BannerlordUnits.IdentityServer\BannerlordUnits.IdentityServer.csproj", "{FA0A7FEE-E3D4-446A-BD14-DA1AFC8EE983}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{36A08E87-47B8-4DC8-82CD-FAD055545934}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36A08E87-47B8-4DC8-82CD-FAD055545934}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36A08E87-47B8-4DC8-82CD-FAD055545934}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA0A7FEE-E3D4-446A-BD14-DA1AFC8EE983}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA0A7FEE-E3D4-446A-BD14-DA1AFC8EE983}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA0A7FEE-E3D4-446A-BD14-DA1AFC8EE983}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA0A7FEE-E3D4-446A-BD14-DA1AFC8EE983}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

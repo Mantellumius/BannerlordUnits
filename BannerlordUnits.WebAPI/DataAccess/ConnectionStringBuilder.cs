@@ -2,7 +2,7 @@ namespace BannerlordUnits.WebAPI.DataAccess;
 
 public class ConnectionStringBuilder
 {
-    public static string BuildFrom(string uriString)
+    public static string BuildFrom(string? uriString)
     {
         var uri = new Uri(uriString);
         var db = uri.AbsolutePath.Trim('/');

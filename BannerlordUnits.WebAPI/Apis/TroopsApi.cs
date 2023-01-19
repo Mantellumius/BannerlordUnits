@@ -1,5 +1,3 @@
-using BannerlordUnits.Models;
-
 namespace BannerlordUnits.WebAPI.Apis;
 
 public class TroopsApi : IApi
@@ -52,7 +50,6 @@ public class TroopsApi : IApi
             .WithTags("Searchers");
     }
 
-
     private async Task<IResult> Get(ITroopsRepository<Troop> troopsRepository)
     {
         return Results.Json((await troopsRepository.GetTroopsAsync()).ToArray());
@@ -69,7 +66,8 @@ public class TroopsApi : IApi
             ? Results.Ok(troop)
             : Results.NotFound();
     }
-
+    
+    [Authorize]
     private async Task<IResult> GetNames(ITroopsRepository<Troop> troopsRepository)
     {
         return Results.Ok(await troopsRepository.GetTroopsNamesAsync());
@@ -88,7 +86,6 @@ public class TroopsApi : IApi
             ? Results.Ok(result)
             : Results.NotFound(Array.Empty<Troop>());
     }
-
 
     private async Task<IResult> Post(Troop troop, ITroopsRepository<Troop> troopsRepository)
     {
