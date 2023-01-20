@@ -1,0 +1,120 @@
+@page "/Companions/Compare"
+@inject HttpClient HttpClient
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<MudStack Row="true" Justify="Justify.SpaceAround" AlignItems="AlignItems.Center" Spacing="25">
+    <MudCard Style="width: 400px" Elevation="20">
+        <MudCardHeader>
+            <MudAutocomplete T="Companion" Label="Companion name" @bind-Value="_companion1"
+                             SearchFunc="@Search" ToStringFunc="@(e => e?.Name)"
+                             ShowProgressIndicator="true"/>
+        </MudCardHeader>
+        <MudCardMedia Image="@_companion1.ImageUrl" Height="700" Class="w-100"/>
+        <MudCardContent>
+            <MudText Typo="Typo.body1">Culture: @_companion1.Culture</MudText>
+        </MudCardContent>
+    </MudCard>
+    <MudStack>
+        <MudText Typo="Typo.subtitle1">One Handed @_companion1.OneHanded</MudText>
+        <MudText Typo="Typo.subtitle1">Two Handed @_companion1.TwoHanded</MudText>
+        <MudText Typo="Typo.subtitle1">Polearm @_companion1.Polearm</MudText>
+        <MudText Typo="Typo.subtitle1">Bow @_companion1.Bow</MudText>
+        <MudText Typo="Typo.subtitle1">Crossbow @_companion1.Crossbow</MudText>
+        <MudText Typo="Typo.subtitle1">Throwing @_companion1.Throwing</MudText>
+        <MudText Typo="Typo.subtitle1">Riding @_companion1.Riding</MudText>
+        <MudText Typo="Typo.subtitle1">Athletics @_companion1.Athletics</MudText>
+        <MudText Typo="Typo.subtitle1">Athletics @_companion1.Crafting</MudText>
+        <MudText Typo="Typo.subtitle1">Scouting @_companion1.Scouting</MudText>
+        <MudText Typo="Typo.subtitle1">Tactics @_companion1.Tactics</MudText>
+        <MudText Typo="Typo.subtitle1">Roguery @_companion1.Roguery</MudText>
+        <MudText Typo="Typo.subtitle1">Charm @_companion1.Charm</MudText>
+        <MudText Typo="Typo.subtitle1">Leadership @_companion1.Leadership</MudText>
+        <MudText Typo="Typo.subtitle1">Trade @_companion1.Trade</MudText>
+        <MudText Typo="Typo.subtitle1">Steward @_companion1.Steward</MudText>
+        <MudText Typo="Typo.subtitle1">Medicine @_companion1.Medicine</MudText>
+        <MudText Typo="Typo.subtitle1">Engineering @_companion1.Engineering</MudText>
+
+    </MudStack>
+    <MudStack>
+        @CalculateDifference(_companion1.OneHanded, _companion2.OneHanded)
+        @CalculateDifference(_companion1.TwoHanded, _companion2.TwoHanded)
+        @CalculateDifference(_companion1.Polearm, _companion2.Polearm)
+        @CalculateDifference(_companion1.Bow, _companion2.Bow)
+        @CalculateDifference(_companion1.Crossbow, _companion2.Crossbow)
+        @CalculateDifference(_companion1.Throwing, _companion2.Throwing)
+        @CalculateDifference(_companion1.Riding, _companion2.Riding)
+        @CalculateDifference(_companion1.Athletics, _companion2.Athletics)
+        @CalculateDifference(_companion1.Crafting, _companion2.Crafting)
+        @CalculateDifference(_companion1.Scouting, _companion2.Scouting)
+        @CalculateDifference(_companion1.Tactics, _companion2.Tactics)
+        @CalculateDifference(_companion1.Roguery, _companion2.Roguery)
+        @CalculateDifference(_companion1.Charm, _companion2.Charm)
+        @CalculateDifference(_companion1.Leadership, _companion2.Leadership)
+        @CalculateDifference(_companion1.Trade, _companion2.Trade)
+        @CalculateDifference(_companion1.Steward, _companion2.Steward)
+        @CalculateDifference(_companion1.Medicine, _companion2.Medicine)
+        @CalculateDifference(_companion1.Engineering, _companion2.Engineering)
+    </MudStack>
+    <MudStack>
+        <MudText Typo="Typo.subtitle1">@_companion2.OneHanded One Handed</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.TwoHanded Two Handed</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Polearm Polearm</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Bow Bow</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Crossbow Crossbow</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Throwing Throwing</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Riding Riding</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Athletics Athletics</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Crafting Crafting</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Scouting Scouting</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Tactics Tactics</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Roguery Roguery</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Charm Charm</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Leadership Leadership</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Trade Trade</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Steward Steward</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Medicine Medicine</MudText>
+        <MudText Typo="Typo.subtitle1">@_companion2.Engineering Engineering</MudText>
+    </MudStack>
+    <MudCard Style="width: 400px" Elevation="20">
+        <MudCardHeader>
+            <MudAutocomplete T="Companion" Label="Companion name" @bind-Value="_companion2"
+                             SearchFunc="@Search" ToStringFunc="@(e => e?.Name)"
+                             ShowProgressIndicator="true"/>
+        </MudCardHeader>
+        <MudCardMedia Image="@_companion2.ImageUrl" Height="700" Class="w-100"/>
+        <MudCardContent>
+            <MudText Typo="Typo.body1">Culture: @_companion2.Culture</MudText>
+        </MudCardContent>
+    </MudCard>
+    }
+</MudStack>
+
+@code {
+    private Companion _companion1 = new() { Name = "" };
+    private Companion _companion2 = new() { Name = "" };
+    private Guid _userId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = state.User;
+        var id = user.Claims.Single(claim => claim.Type == "sub");
+        _userId = Guid.Parse((ReadOnlySpan<char>)id.Value);
+    }
+
+    private async Task<IEnumerable<Companion>?> Search(string name)
+    {
+        return (await HttpClient.GetFromJsonAsync<List<Companion>>($"/Companions/Search/AuthorId/{_userId}"))?
+            .Where(companion => companion.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private Color GetColor(int value) => value switch{
+        0 => Color.Default,
+        > 0 => Color.Success,
+        < 0 => Color.Error
+        };
+
+    private RenderFragment CalculateDifference(int value1, int value2) =>
+        @<MudText Typo="Typo.subtitle1" Color="@GetColor(value1 - value2)">@(value1 - value2)</MudText>;
+
+}

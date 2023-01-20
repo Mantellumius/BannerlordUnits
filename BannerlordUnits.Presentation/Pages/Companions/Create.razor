@@ -1,0 +1,304 @@
+@page "/Companions/Create"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using System.Net.Http.Headers
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@inject HttpClient HttpClient
+@inject IAccessTokenProvider AccessTokenProvider
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ISnackbar Snackbar
+@using FluentValidation
+
+<MudContainer class="d-flex justify-center align-center">
+    <MudCard Elevation="25" Class="w-75">
+        <MudForm Model="@_model" @ref="@_form" Validation="@(_companionValidator.ValidateValue)" ValidationDelay="1">
+            <MudCardContent>
+                <MudTextField @bind-Value="_model.Name"
+                              For="@(() => _model.Name)"
+                              Immediate="true"
+                              Label="Name"/>
+
+
+                <MudTextField @bind-Value="_model.Culture"
+                              For="@(() => _model.Culture)"
+                              Immediate="true"
+                              Label="Culture"/>
+
+
+                <MudTextField @bind-Value="_model.ImageUrl"
+                              For="@(() => _model.ImageUrl)"
+                              Immediate="true"
+                              Label="ImageUrl"/>
+
+                <MudGrid Justify="Justify.FlexStart">
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.OneHanded"
+                                         For="@(() => _model.OneHanded)"
+                                         Immediate="true"
+                                         Label="One Handed"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.TwoHanded"
+                                         For="@(() => _model.TwoHanded)"
+                                         Immediate="true"
+                                         Label="Two Handed"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Polearm"
+                                         For="@(() => _model.Polearm)"
+                                         Immediate="true"
+                                         Label="Polearm"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Bow"
+                                         For="@(() => _model.Bow)"
+                                         Immediate="true"
+                                         Label="Bow"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Crossbow"
+                                         For="@(() => _model.Crossbow)"
+                                         Immediate="true"
+                                         Label="Crossbow"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Throwing"
+                                         For="@(() => _model.Throwing)"
+                                         Immediate="true"
+                                         Label="Throwing"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Riding"
+                                         For="@(() => _model.Riding)"
+                                         Immediate="true"
+                                         Label="Riding"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Athletics"
+                                         For="@(() => _model.Athletics)"
+                                         Immediate="true"
+                                         Label="Athletics"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Crafting"
+                                         For="@(() => _model.Crafting)"
+                                         Immediate="true"
+                                         Label="Crafting"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Scouting"
+                                         For="@(() => _model.Scouting)"
+                                         Immediate="true"
+                                         Label="Scouting"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Tactics"
+                                         For="@(() => _model.Tactics)"
+                                         Immediate="true"
+                                         Label="Tactics"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Roguery"
+                                         For="@(() => _model.Roguery)"
+                                         Immediate="true"
+                                         Label="Roguery"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Charm"
+                                         For="@(() => _model.Charm)"
+                                         Immediate="true"
+                                         Label="Charm"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Leadership"
+                                         For="@(() => _model.Leadership)"
+                                         Immediate="true"
+                                         Label="Leadership"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Trade"
+                                         For="@(() => _model.Trade)"
+                                         Immediate="true"
+                                         Label="Trade"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Steward"
+                                         For="@(() => _model.Steward)"
+                                         Immediate="true"
+                                         Label="Steward"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Medicine"
+                                         For="@(() => _model.Medicine)"
+                                         Immediate="true"
+                                         Label="Medicine"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Engineering"
+                                         For="@(() => _model.Engineering)"
+                                         Immediate="true"
+                                         Label="Engineering"/>
+                    </MudItem>
+
+                </MudGrid>
+            </MudCardContent>
+        </MudForm>
+        <MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await Submit())" Disabled="_processing">
+                @if (_processing)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                    <MudText Class="ms-2">Processing</MudText>
+                }
+                else
+                {
+                    <MudText>
+                        Submit
+                    </MudText>
+                }
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudContainer>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        var tokenResult = await AccessTokenProvider.RequestAccessToken();
+        if (tokenResult.TryGetToken(out var token))
+        {
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
+            var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = state.User;
+            var id = user.Claims.Single(claim => claim.Type == "sub");
+            _authorId = Guid.Parse((ReadOnlySpan<char>)id.Value);
+            _model.AuthorId = _authorId;
+        }
+    }
+
+    private MudForm _form;
+    private readonly CompanionFluentValidator _companionValidator = new();
+    private readonly Companion _model = new();
+    private Guid _authorId;
+    private bool _processing;
+
+    private async Task Submit()
+    {
+        _processing = true;
+        await _form.Validate();
+
+        if (!_form.IsValid)
+        {
+            _processing = false;
+            return;
+        }
+        try
+        {
+            var companions = await HttpClient.GetFromJsonAsync<Companion[]>($"/Companions/Search/AuthorId/{_authorId}") ?? Array.Empty<Companion>();
+            if (companions.Any(companion => companion.Name == _model.Name))
+            {
+                Snackbar.Add($"Error! Companion with name {_model.Name} already exists.");
+            }
+            else
+            {
+                await HttpClient.PostAsJsonAsync("/Companions", _model);
+                Snackbar.Add("Submited!");
+            }
+        }
+        catch (Exception)
+        {
+            Snackbar.Add("Error!");
+        }
+        finally
+        {
+            _processing = false;
+        }
+    }
+
+    /// <summary>
+    /// A standard AbstractValidator which contains multiple rules and can be shared with the back end API
+    /// </summary>
+    /// <typeparam name="Companion"></typeparam>
+    public class CompanionFluentValidator : AbstractValidator<Companion>
+    {
+        public CompanionFluentValidator()
+        {
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .Length(1, 100);
+
+            RuleFor(x => x.Culture)
+                .NotEmpty()
+                .Length(1, 100);
+
+            RuleFor(x => x.ImageUrl)
+                .Length(0, 256);
+
+            RuleFor(x => x.OneHanded)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.TwoHanded)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Polearm)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Bow)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Crossbow)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Throwing)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Riding)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Athletics)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Crafting)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Scouting)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Tactics)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Roguery)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Charm)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Leadership)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Trade)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Steward)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Medicine)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Engineering)
+                .GreaterThanOrEqualTo(0);
+        }
+
+        public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
+        {
+            var result = await ValidateAsync(ValidationContext<Companion>.CreateWithOptions(
+                (Companion)model,
+                x => x.IncludeProperties(propertyName)));
+            return result.IsValid ?
+                Array.Empty<string>() :
+                result.Errors.Select(e => e.ErrorMessage);
+        };
+    }
+
+}

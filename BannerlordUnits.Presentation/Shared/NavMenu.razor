@@ -1,13 +1,20 @@
 ﻿<MudDrawer @bind-Open="SideBarOpen" Elevation="1">
     <MudDrawerHeader>
-        <MudAvatar Color="Color.Transparent" Size="Size.Large" Image="images/logo.png" />
+        <MudAvatar Color="Color.Transparent" Size="Size.Large" Image="images/logo.png"/>
         <MudText Typo="Typo.h5" Color="Color.Primary" Style="margin-top:10px; margin-left:15px;">Bannerlord Units</MudText>
     </MudDrawerHeader>
     <MudNavMenu>
         <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-        <MudNavLink Href="/Troops/AllTroops" Icon="@Icons.Material.Filled.Storage">All Troops</MudNavLink>
-        <MudNavLink Href="/Troops/CompareTroops" Icon="@Icons.Material.Filled.CompareArrows">Compare Troops</MudNavLink>
-        <MudNavLink Href="/Troops/CreateTroops" Icon="@Icons.Material.Filled.CompareArrows">Create Troops</MudNavLink>
+        <MudNavGroup Title="Troops" Expanded="true" Icon="@Icons.Material.Filled.Groups">
+            <MudNavLink Href="/Troops/Table" Icon="@Icons.Material.Filled.TableRows">Table</MudNavLink>
+            <MudNavLink Href="/Troops/Compare" Icon="@Icons.Material.Filled.CompareArrows">Compare</MudNavLink>
+            <MudNavLink Href="/Troops/Create" Icon="@Icons.Material.Filled.Create">Create</MudNavLink>
+        </MudNavGroup>
+        <MudNavGroup Title="Companions" Expanded="true" Icon="@Icons.Material.Filled.Person">
+            <MudNavLink Href="/Companions/Table" Icon="@Icons.Material.Filled.TableRows">Table</MudNavLink>
+            <MudNavLink Href="/Companions/Compare" Icon="@Icons.Material.Filled.CompareArrows">Compare</MudNavLink>
+            <MudNavLink Href="/Companions/Create" Icon="@Icons.Material.Filled.Create">Create</MudNavLink>
+        </MudNavGroup>
     </MudNavMenu>
 </MudDrawer>
 

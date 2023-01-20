@@ -1,0 +1,241 @@
+@page "/Troops/Create"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using System.Net.Http.Headers
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@inject HttpClient HttpClient
+@inject IAccessTokenProvider AccessTokenProvider
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ISnackbar Snackbar
+@using FluentValidation
+
+<MudContainer Class="d-flex justify-center align-center">
+    <MudCard Class="w-75" Elevation="25">
+        <MudForm Model="@_model" @ref="@_form" Validation="@(_customTroopValidator.ValidateValue)" ValidationDelay="1">
+            <MudCardContent>
+                <MudTextField @bind-Value="_model.Name"
+                              For="@(() => _model.Name)"
+                              Immediate="true"
+                              Label="Name"/>
+
+                <MudNumericField @bind-Value="_model.Tier"
+                                 For="@(() => _model.Tier)"
+                                 Immediate="true"
+                                 Label="Tier"/>
+
+                <MudTextField @bind-Value="_model.Type"
+                              For="@(() => _model.Type)"
+                              Immediate="true"
+                              Label="Type"/>
+
+                <MudTextField @bind-Value="_model.Culture"
+                              For="@(() => _model.Culture)"
+                              Immediate="true"
+                              Label="Culture"/>
+
+                <MudNumericField @bind-Value="_model.Wage"
+                                 For="@(() => _model.Wage)"
+                                 Immediate="true"
+                                 Label="Wage"/>
+
+                <MudTextField @bind-Value="_model.ImageUrl"
+                              For="@(() => _model.ImageUrl)"
+                              Immediate="true"
+                              Label="ImageUrl"/>
+
+                <MudTextField @bind-Value="_model.IconUrl"
+                              For="@(() => _model.IconUrl)"
+                              Immediate="true"
+                              Label="IconUrl"/>
+                <MudGrid Justify="Justify.FlexStart">
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.OneHanded"
+                                         For="@(() => _model.OneHanded)"
+                                         Immediate="true"
+                                         Label="One Handed"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.TwoHanded"
+                                         For="@(() => _model.TwoHanded)"
+                                         Immediate="true"
+                                         Label="Two Handed"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Polearm"
+                                         For="@(() => _model.Polearm)"
+                                         Immediate="true"
+                                         Label="Polearm"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Bow"
+                                         For="@(() => _model.Bow)"
+                                         Immediate="true"
+                                         Label="Bow"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Crossbow"
+                                         For="@(() => _model.Crossbow)"
+                                         Immediate="true"
+                                         Label="Crossbow"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Throwing"
+                                         For="@(() => _model.Throwing)"
+                                         Immediate="true"
+                                         Label="Throwing"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Riding"
+                                         For="@(() => _model.Riding)"
+                                         Immediate="true"
+                                         Label="Riding"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudNumericField @bind-Value="_model.Athletics"
+                                         For="@(() => _model.Athletics)"
+                                         Immediate="true"
+                                         Label="Athletics"/>
+                    </MudItem>
+                </MudGrid>
+            </MudCardContent>
+        </MudForm>
+        <MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await Submit())" Disabled="_processing">
+                @if (_processing)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                    <MudText Class="ms-2">Processing</MudText>
+                }
+                else
+                {
+                    <MudText>
+                        Submit
+                    </MudText>
+                }
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudContainer>
+
+@code {
+
+    private MudForm _form = null!;
+    private readonly CustomTroopFluentValidator _customTroopValidator = new();
+    private readonly CustomTroop _model = new();
+    private Guid _id;
+    private bool _processing;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var tokenResult = await AccessTokenProvider.RequestAccessToken();
+        if (tokenResult.TryGetToken(out var token))
+        {
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
+            var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = state.User;
+            var id = user.Claims.Single(claim => claim.Type == "sub");
+            _id = Guid.Parse((ReadOnlySpan<char>)id.Value);
+            _model.AuthorId = _id;
+        }
+    }
+
+    private async Task Submit()
+    {
+        _processing = true;
+        await _form.Validate();
+
+        if (!_form.IsValid)
+        {
+            _processing = false;
+            return;
+        }
+        try
+        {
+            var customTroops = await HttpClient.GetFromJsonAsync<CustomTroop[]>($"/CustomTroops/Search/AuthorId/{_id}") ?? Array.Empty<CustomTroop>();
+            if (customTroops.Any(troop => troop.Name == _model.Name))
+            {
+                Snackbar.Add($"Error! Custom troop with name {_model.Name} already exists.");
+            }
+            else
+            {
+                await HttpClient.PostAsJsonAsync("/CustomTroops", _model);
+                Snackbar.Add("Submited!");
+            }
+        }
+        catch (Exception)
+        {
+            Snackbar.Add("Error!");
+        }
+        finally
+        {
+            _processing = false;
+        }
+    }
+
+    /// <summary>
+    /// A standard AbstractValidator which contains multiple rules and can be shared with the back end API
+    /// </summary>
+    /// <typeparam name="CustomTroop"></typeparam>
+    public class CustomTroopFluentValidator : AbstractValidator<CustomTroop>
+    {
+        public CustomTroopFluentValidator()
+        {
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .Length(1, 100);
+
+            RuleFor(x => x.Tier)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Type)
+                .NotEmpty()
+                .Length(1, 32);
+
+            RuleFor(x => x.Culture)
+                .NotEmpty()
+                .Length(1, 100);
+
+            RuleFor(x => x.Wage)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.ImageUrl)
+                .Length(0, 256);
+
+            RuleFor(x => x.IconUrl)
+                .Length(0, 256);
+
+            RuleFor(x => x.OneHanded)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.TwoHanded)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Polearm)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Bow)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Crossbow)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Throwing)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Riding)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.Athletics)
+                .GreaterThanOrEqualTo(0);
+        }
+
+        public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
+        {
+            var result = await ValidateAsync(ValidationContext<CustomTroop>.CreateWithOptions((CustomTroop)model, x => x.IncludeProperties(propertyName)));
+            return result.IsValid ?
+                Array.Empty<string>() :
+                result.Errors.Select(e => e.ErrorMessage);
+        };
+    }
+
+}

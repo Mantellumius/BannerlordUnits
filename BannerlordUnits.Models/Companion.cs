@@ -18,7 +18,7 @@ public class Companion : IWithName
     public int Crafting { get; set; }
     public int Scouting { get; set; }
     public int Tactics { get; set; }
-    public int Roguery { get; set; }
+    public int Roguery { get; set; }    
     public int Charm { get; set; }
     public int Leadership { get; set; }
     public int Trade { get; set; }

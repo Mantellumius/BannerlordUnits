@@ -1,0 +1,126 @@
+@page "/Companions/Table"
+@using System.Net.Http.Headers
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject HttpClient HttpClient
+@inject IAccessTokenProvider AccessTokenProvider
+
+<MudContainer class="d-flex justify-center align-center">
+    <MudTable Items="@_companions" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_isLoading" ReadOnly="true"
+              LoadingProgressColor="Color.Info" Filter="new Func<Companion, bool>(FilterFunc)" Class="w-100" HorizontalScrollbar="true">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6" Color="Color.Primary">Companions</MudText>
+            <MudSpacer/>
+            <MudTextField @bind-Value="_searchString" Placeholder="Search"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                          IconSize="Size.Medium" Class="mt-0">
+            </MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Name)">Name</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Culture)">Culture</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.OneHanded)">One Handed</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.TwoHanded)">Two Handed</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Polearm)">Polearm</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Bow)">Bow</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Crossbow)">Crossbow</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Throwing)">Throwing</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Riding)">Riding</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Athletics)">Athletics</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Crafting)">Crafting</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Scouting)">Scouting</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Tactics)">Tactics</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Roguery)">Roguery</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Charm)">Charm</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Leadership)">Leadership</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Trade)">Trade</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Steward)">Steward</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Medicine)">Medicine</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Companion, object>(x => x.Engineering)">Engineering</MudTableSortLabel>
+            </MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Culture">@context.Culture</MudTd>
+            <MudTd DataLabel="One Handed">@context.OneHanded</MudTd>
+            <MudTd DataLabel="Two Handed">@context.TwoHanded</MudTd>
+            <MudTd DataLabel="Polearm">@context.Polearm</MudTd>
+            <MudTd DataLabel="Bow">@context.Bow</MudTd>
+            <MudTd DataLabel="Crossbow">@context.Crossbow</MudTd>
+            <MudTd DataLabel="Throwing">@context.Throwing</MudTd>
+            <MudTd DataLabel="Riding">@context.Riding</MudTd>
+            <MudTd DataLabel="Athletics">@context.Athletics</MudTd>
+            <MudTd DataLabel="Crafting">@context.Crafting</MudTd>
+            <MudTd DataLabel="Riding">@context.Scouting</MudTd>
+            <MudTd DataLabel="Athletics">@context.Tactics</MudTd>
+            <MudTd DataLabel="Crafting">@context.Roguery</MudTd>
+            <MudTd DataLabel="Riding">@context.Charm</MudTd>
+            <MudTd DataLabel="Athletics">@context.Leadership</MudTd>
+            <MudTd DataLabel="Crafting">@context.Trade</MudTd>
+            <MudTd DataLabel="Riding">@context.Steward</MudTd>
+            <MudTd DataLabel="Athletics">@context.Medicine</MudTd>
+            <MudTd DataLabel="Crafting">@context.Engineering</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new[] { 10, 25, 50, 100, int.MaxValue }" InfoFormat="@($"Center {InfoFormat}")" HorizontalAlignment="HorizontalAlignment.Center"/>
+        </PagerContent>
+    </MudTable>
+</MudContainer>
+
+@code {
+    private string _searchString = "";
+    private bool _isLoading = true;
+        private const string InfoFormat = "{first_item}-{last_item} of {all_items}";
+    private Companion[]? _companions = { };
+
+    protected override async Task OnInitializedAsync()
+    {
+        var tokenResult = await AccessTokenProvider.RequestAccessToken();
+        if (tokenResult.TryGetToken(out var token))
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
+        _companions = await HttpClient.GetFromJsonAsync<Companion[]>("/Companions");
+        _isLoading = false;
+    }
+
+    private bool FilterFunc(Companion companion) => string.IsNullOrWhiteSpace(_searchString) ||
+                                                    $"{companion.Name} {companion.Culture}".ToLower().Contains(_searchString, StringComparison.OrdinalIgnoreCase);
+
+}

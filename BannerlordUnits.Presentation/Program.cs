@@ -15,7 +15,6 @@ builder.Services.AddOidcAuthentication(options =>
 {
     // Configure your authentication provider options here.
     // For more information, see https://aka.ms/blazor-standalone-auth
-    options.AuthenticationPaths.RemoteRegisterPath = "https://localhost:5002/Account/Register";
     builder.Configuration.Bind("IdentityServer", options.ProviderOptions);
     options.ProviderOptions.DefaultScopes.Add("TroopsApi");
 });

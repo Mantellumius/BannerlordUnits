@@ -1,9 +1,7 @@
-@page "/Troops/CompareTroops"
+@page "/Troops/Compare"
 @inject HttpClient HttpClient
 
 <MudStack Row="true" Justify="Justify.SpaceAround" AlignItems="AlignItems.Center" Spacing="25">
-    @if (troop1 is not null)
-    {
         <MudCard Style="width: 400px" Elevation="20">
             <MudCardHeader>
                 <MudAutocomplete T="Troop" Label="Troop name" @bind-Value="troop1"
@@ -28,9 +26,6 @@
             <MudText Typo="Typo.subtitle1">Riding @troop1.Riding</MudText>
             <MudText Typo="Typo.subtitle1">Athletics @troop1.Athletics</MudText>
         </MudStack>
-    }
-    @if (troop1 is not null && troop2 is not null)
-    {
         <MudStack>
             @CalculateDifference(troop1.OneHanded, troop2.OneHanded)
             @CalculateDifference(troop1.TwoHanded, troop2.TwoHanded)
@@ -41,10 +36,7 @@
             @CalculateDifference(troop1.Riding, troop2.Riding)
             @CalculateDifference(troop1.Athletics, troop2.Athletics)
         </MudStack>
-    }
 
-    @if (troop2 is not null)
-    {
         <MudStack>
             <MudText Typo="Typo.subtitle1">@troop2.OneHanded One Handed</MudText>
             <MudText Typo="Typo.subtitle1">@troop2.TwoHanded Two Handed</MudText>
@@ -69,7 +61,6 @@
                 <MudText Typo="Typo.body1">Wage: @troop2.Wage</MudText>
             </MudCardContent>
         </MudCard>
-    }
 </MudStack>
 
 @code {
