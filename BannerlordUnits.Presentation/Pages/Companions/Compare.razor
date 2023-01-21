@@ -90,8 +90,8 @@
 </MudStack>
 
 @code {
-    private Companion _companion1 = new() { Name = "" };
-    private Companion _companion2 = new() { Name = "" };
+    private Companion _companion1 = new();
+    private Companion _companion2 = new();
     private Guid _userId;
 
     protected override async Task OnInitializedAsync()
@@ -105,7 +105,7 @@
     private async Task<IEnumerable<Companion>?> Search(string name)
     {
         return (await HttpClient.GetFromJsonAsync<List<Companion>>($"/Companions/Search/AuthorId/{_userId}"))?
-            .Where(companion => companion.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+            .Where(companion => companion.Name.Contains(name ?? "", StringComparison.OrdinalIgnoreCase));
     }
 
     private Color GetColor(int value) => value switch{

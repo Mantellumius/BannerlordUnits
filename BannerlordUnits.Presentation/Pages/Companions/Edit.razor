@@ -1,4 +1,4 @@
-@page "/Companions/Create"
+@page "/Companions/Edit"
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using System.Net.Http.Headers
 @using Microsoft.AspNetCore.Authorization
@@ -12,133 +12,136 @@
 <MudContainer class="d-flex justify-center align-center">
     <MudCard Elevation="25" Class="w-75">
         <MudCardHeader>
-            <MudText Typo="Typo.h3">Create companions</MudText>
+            <MudText Typo="Typo.h3">Edit companions</MudText>
         </MudCardHeader>
-        <MudForm Model="@_model" @ref="@_form" Validation="@(_companionValidator.ValidateValue)" ValidationDelay="1">
+        <MudForm Model="@_companion" @ref="@_form" Validation="@(_companionValidator.ValidateValue)" ValidationDelay="1">
             <MudCardContent>
-                <MudTextField @bind-Value="_model.Name"
-                              For="@(() => _model.Name)"
+                <MudAutocomplete T="Companion" Label="Companion name" @bind-Value="_companion"
+                                 SearchFunc="@Search" ToStringFunc="@(e => e?.Name)"
+                                 ShowProgressIndicator="true"/>
+                <MudTextField @bind-Value="_companion.Name"
+                              For="@(() => _companion.Name)"
                               Immediate="true"
                               Label="Name"/>
 
 
-                <MudTextField @bind-Value="_model.Culture"
-                              For="@(() => _model.Culture)"
+                <MudTextField @bind-Value="_companion.Culture"
+                              For="@(() => _companion.Culture)"
                               Immediate="true"
                               Label="Culture"/>
 
 
-                <MudTextField @bind-Value="_model.ImageUrl"
-                              For="@(() => _model.ImageUrl)"
+                <MudTextField @bind-Value="_companion.ImageUrl"
+                              For="@(() => _companion.ImageUrl)"
                               Immediate="true"
                               Label="ImageUrl"/>
 
                 <MudGrid Justify="Justify.FlexStart">
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.OneHanded"
-                                         For="@(() => _model.OneHanded)"
+                        <MudNumericField @bind-Value="_companion.OneHanded"
+                                         For="@(() => _companion.OneHanded)"
                                          Immediate="true"
                                          Label="One Handed"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.TwoHanded"
-                                         For="@(() => _model.TwoHanded)"
+                        <MudNumericField @bind-Value="_companion.TwoHanded"
+                                         For="@(() => _companion.TwoHanded)"
                                          Immediate="true"
                                          Label="Two Handed"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Polearm"
-                                         For="@(() => _model.Polearm)"
+                        <MudNumericField @bind-Value="_companion.Polearm"
+                                         For="@(() => _companion.Polearm)"
                                          Immediate="true"
                                          Label="Polearm"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Bow"
-                                         For="@(() => _model.Bow)"
+                        <MudNumericField @bind-Value="_companion.Bow"
+                                         For="@(() => _companion.Bow)"
                                          Immediate="true"
                                          Label="Bow"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Crossbow"
-                                         For="@(() => _model.Crossbow)"
+                        <MudNumericField @bind-Value="_companion.Crossbow"
+                                         For="@(() => _companion.Crossbow)"
                                          Immediate="true"
                                          Label="Crossbow"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Throwing"
-                                         For="@(() => _model.Throwing)"
+                        <MudNumericField @bind-Value="_companion.Throwing"
+                                         For="@(() => _companion.Throwing)"
                                          Immediate="true"
                                          Label="Throwing"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Riding"
-                                         For="@(() => _model.Riding)"
+                        <MudNumericField @bind-Value="_companion.Riding"
+                                         For="@(() => _companion.Riding)"
                                          Immediate="true"
                                          Label="Riding"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Athletics"
-                                         For="@(() => _model.Athletics)"
+                        <MudNumericField @bind-Value="_companion.Athletics"
+                                         For="@(() => _companion.Athletics)"
                                          Immediate="true"
                                          Label="Athletics"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Crafting"
-                                         For="@(() => _model.Crafting)"
+                        <MudNumericField @bind-Value="_companion.Crafting"
+                                         For="@(() => _companion.Crafting)"
                                          Immediate="true"
                                          Label="Crafting"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Scouting"
-                                         For="@(() => _model.Scouting)"
+                        <MudNumericField @bind-Value="_companion.Scouting"
+                                         For="@(() => _companion.Scouting)"
                                          Immediate="true"
                                          Label="Scouting"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Tactics"
-                                         For="@(() => _model.Tactics)"
+                        <MudNumericField @bind-Value="_companion.Tactics"
+                                         For="@(() => _companion.Tactics)"
                                          Immediate="true"
                                          Label="Tactics"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Roguery"
-                                         For="@(() => _model.Roguery)"
+                        <MudNumericField @bind-Value="_companion.Roguery"
+                                         For="@(() => _companion.Roguery)"
                                          Immediate="true"
                                          Label="Roguery"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Charm"
-                                         For="@(() => _model.Charm)"
+                        <MudNumericField @bind-Value="_companion.Charm"
+                                         For="@(() => _companion.Charm)"
                                          Immediate="true"
                                          Label="Charm"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Leadership"
-                                         For="@(() => _model.Leadership)"
+                        <MudNumericField @bind-Value="_companion.Leadership"
+                                         For="@(() => _companion.Leadership)"
                                          Immediate="true"
                                          Label="Leadership"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Trade"
-                                         For="@(() => _model.Trade)"
+                        <MudNumericField @bind-Value="_companion.Trade"
+                                         For="@(() => _companion.Trade)"
                                          Immediate="true"
                                          Label="Trade"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Steward"
-                                         For="@(() => _model.Steward)"
+                        <MudNumericField @bind-Value="_companion.Steward"
+                                         For="@(() => _companion.Steward)"
                                          Immediate="true"
                                          Label="Steward"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Medicine"
-                                         For="@(() => _model.Medicine)"
+                        <MudNumericField @bind-Value="_companion.Medicine"
+                                         For="@(() => _companion.Medicine)"
                                          Immediate="true"
                                          Label="Medicine"/>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudNumericField @bind-Value="_model.Engineering"
-                                         For="@(() => _model.Engineering)"
+                        <MudNumericField @bind-Value="_companion.Engineering"
+                                         For="@(() => _companion.Engineering)"
                                          Immediate="true"
                                          Label="Engineering"/>
                     </MudItem>
@@ -156,7 +159,7 @@
                 else
                 {
                     <MudText>
-                        Submit
+                        Submit changes
                     </MudText>
                 }
             </MudButton>
@@ -176,13 +179,13 @@
             var user = state.User;
             var id = user.Claims.Single(claim => claim.Type == "sub");
             _authorId = Guid.Parse((ReadOnlySpan<char>)id.Value);
-            _model.AuthorId = _authorId;
+            _companion.AuthorId = _authorId;
         }
     }
 
     private MudForm _form;
     private readonly CompanionFluentValidator _companionValidator = new();
-    private readonly Companion _model = new();
+    private Companion _companion = new();
     private Guid _authorId;
     private bool _processing;
 
@@ -199,14 +202,14 @@
         try
         {
             var companions = await HttpClient.GetFromJsonAsync<Companion[]>($"/Companions/Search/AuthorId/{_authorId}") ?? Array.Empty<Companion>();
-            if (companions.Any(companion => companion.Name == _model.Name))
+            if (companions.All(companion => companion.Name != _companion.Name))
             {
-                Snackbar.Add($"Error! Companion with name {_model.Name} already exists.");
+                Snackbar.Add($"Error! Companion with name {_companion.Name} not found.");
             }
             else
             {
-                await HttpClient.PostAsJsonAsync("/Companions", _model);
-                Snackbar.Add("Submited!");
+                await HttpClient.PutAsJsonAsync("/Companions", _companion);
+                Snackbar.Add("Changes submited!");
             }
         }
         catch (Exception)
@@ -217,6 +220,12 @@
         {
             _processing = false;
         }
+    }
+
+    private async Task<IEnumerable<Companion>?> Search(string? name)
+    {
+        return (await HttpClient.GetFromJsonAsync<List<Companion>>($"/Companions/Search/AuthorId/{_authorId}"))?
+            .Where(companion => companion.Name.Contains(name ?? "", StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>

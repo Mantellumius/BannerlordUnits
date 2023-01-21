@@ -64,13 +64,13 @@
 </MudStack>
 
 @code {
-    Troop? troop1 = new() { Name = "" };
-    Troop? troop2 = new() { Name = "" };
+    Troop? troop1 = new();
+    Troop? troop2 = new();
 
     private async Task<IEnumerable<Troop>?> Search(string name)
     {
         return (await HttpClient.GetFromJsonAsync<List<Troop>>($"Troops"))?
-            .Where(troop => troop.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+            .Where(troop => troop.Name.Contains(name ?? "", StringComparison.OrdinalIgnoreCase));
     }
 
     private Color GetColor(int value) => value switch{
