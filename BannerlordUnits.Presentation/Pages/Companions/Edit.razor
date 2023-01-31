@@ -1,7 +1,4 @@
 @page "/Companions/Edit"
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@using System.Net.Http.Headers
-@using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 @inject HttpClient HttpClient
 @inject IAccessTokenProvider AccessTokenProvider
@@ -19,11 +16,6 @@
                 <MudAutocomplete T="Companion" Label="Companion name" @bind-Value="_companion"
                                  SearchFunc="@Search" ToStringFunc="@(e => e?.Name)"
                                  ShowProgressIndicator="true"/>
-                <MudTextField @bind-Value="_companion.Name"
-                              For="@(() => _companion.Name)"
-                              Immediate="true"
-                              Label="Name"/>
-
 
                 <MudTextField @bind-Value="_companion.Culture"
                               For="@(() => _companion.Culture)"

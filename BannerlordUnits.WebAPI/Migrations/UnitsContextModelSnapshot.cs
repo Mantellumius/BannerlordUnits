@@ -92,7 +92,7 @@ namespace BannerlordUnits.WebAPI.Migrations
 
                     b.HasKey("Name");
 
-                    b.ToTable("Companions");
+                    b.ToTable("Companions", (string)null);
                 });
 
             modelBuilder.Entity("BannerlordUnits.Models.CustomTroop", b =>
@@ -147,7 +147,7 @@ namespace BannerlordUnits.WebAPI.Migrations
 
                     b.HasKey("Name");
 
-                    b.ToTable("CustomTroops");
+                    b.ToTable("CustomTroops", (string)null);
                 });
 
             modelBuilder.Entity("BannerlordUnits.Models.Troop", b =>
@@ -199,7 +199,7 @@ namespace BannerlordUnits.WebAPI.Migrations
 
                     b.HasKey("Name");
 
-                    b.ToTable("Troops");
+                    b.ToTable("Troops", (string)null);
                 });
 #pragma warning restore 612, 618
         }

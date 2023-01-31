@@ -2,7 +2,6 @@ namespace BannerlordUnits.Models;
 
 public interface ITroop : IWithName
 {
-    string Name { get; set; }
     int Tier { get; set; }
     string? Type { get; set; }
     string? Culture { get; set; }

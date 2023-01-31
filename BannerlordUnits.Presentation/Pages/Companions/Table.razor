@@ -1,6 +1,5 @@
 @page "/Companions/Table"
-@using System.Net.Http.Headers
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@attribute [Authorize]
 @inject HttpClient HttpClient
 @inject IAccessTokenProvider AccessTokenProvider
 

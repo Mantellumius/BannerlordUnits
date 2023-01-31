@@ -19,4 +19,23 @@ public class CustomTroop : ITroop
     public int Throwing { get; set; }
     public int Riding { get; set; }
     public int Athletics { get; set; }
+
+    public Troop ToTroop() => new Troop
+    {
+        Name = Name,
+        Tier = Tier,
+        Type = Type,
+        Culture = Culture,
+        Wage = Wage,
+        ImageUrl = ImageUrl,
+        IconUrl = IconUrl,
+        OneHanded = OneHanded,
+        TwoHanded = TwoHanded,
+        Polearm = Polearm,
+        Bow = Bow,
+        Crossbow = Crossbow,
+        Throwing = Throwing,
+        Riding = Riding,
+        Athletics = Athletics,
+    };
 }

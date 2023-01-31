@@ -1,8 +1,8 @@
 @page "/Troops/Table"
-@using System.Net.Http.Headers
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@attribute [AllowAnonymous]
 @inject HttpClient HttpClient
-@inject IAccessTokenProvider TokenProvider
+@inject IAccessTokenProvider AccessTokenProvider
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <MudContainer class="d-flex justify-center align-center">
     <MudTable Items="@_troops" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_isLoading" ReadOnly="true"
@@ -84,17 +84,32 @@
 @code {
     private string _searchString = "";
     private bool _isLoading = true;
-    private bool _showIcon = false;
     private readonly string _infoFormat = "{first_item}-{last_item} of {all_items}";
-    private Troop[]? _troops = { };
+    private Troop[] _troops = { };
+    private CustomTroop[] _customTroops = { };
+    private Guid? _id;
 
     protected override async Task OnInitializedAsync()
     {
-        _troops = await HttpClient.GetFromJsonAsync<Troop[]>("/Troops");
+        var tokenResult = await AccessTokenProvider.RequestAccessToken();
+        if (tokenResult.TryGetToken(out var token))
+        {
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
+            var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = state.User;
+            var id = user.Claims.Single(claim => claim.Type == "sub");
+            _id = Guid.Parse((ReadOnlySpan<char>)id.Value);
+        }
+        _troops = await HttpClient.GetFromJsonAsync<Troop[]>("/Troops") ?? Array.Empty<Troop>();
+        if (_id is not null)
+        {
+            _customTroops = await HttpClient.GetFromJsonAsync<CustomTroop[]>($"/CustomTroops/Search/AuthorId/{_id}") ?? Array.Empty<CustomTroop>();
+            _troops = _troops.Concat(_customTroops.Select(customTroop => customTroop.ToTroop())).ToArray();
+        }
         _isLoading = false;
     }
 
-    private bool FilterFunc(Troop troop) => string.IsNullOrWhiteSpace(_searchString) ||
-                                            $"{troop.Name} {troop.Culture} {troop.Type} {troop.Tier}".ToLower().Contains(_searchString, StringComparison.OrdinalIgnoreCase);
+    private bool FilterFunc(ITroop troop) => string.IsNullOrWhiteSpace(_searchString) ||
+                                             $"{troop.Name} {troop.Culture} {troop.Type} {troop.Tier}".ToLower().Contains(_searchString, StringComparison.OrdinalIgnoreCase);
 
 }

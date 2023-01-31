@@ -77,14 +77,14 @@ public class TroopsApi : IApi
 
     private IResult SearchByType(string type, IRepository<Troop> troopsRepository)
     {
-        return troopsRepository.SearchByTroopsType(type).ToArray() is IEnumerable<ITroop> result
+        return troopsRepository.SearchByTroopsType(type).ToArray() is IEnumerable<Troop> result
             ? Results.Ok(result)
             : Results.NotFound(Array.Empty<Troop>());
     }
 
     private IResult SearchByCulture(string culture, IRepository<Troop> troopsRepository)
     {
-        return troopsRepository.SearchByTroopsCulture(culture).ToArray() is IEnumerable<ITroop> result
+        return troopsRepository.SearchByTroopsCulture(culture).ToArray() is IEnumerable<Troop> result
             ? Results.Ok(result)
             : Results.NotFound(Array.Empty<Troop>());
     }

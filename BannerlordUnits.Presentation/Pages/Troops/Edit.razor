@@ -1,7 +1,4 @@
 @page "/Troops/Edit"
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@using System.Net.Http.Headers
-@using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 @inject HttpClient HttpClient
 @inject IAccessTokenProvider AccessTokenProvider
@@ -16,13 +13,9 @@
         </MudCardHeader>
         <MudForm Model="@_troop" @ref="@_form" Validation="@(_customTroopValidator.ValidateValue)" ValidationDelay="1">
             <MudCardContent>
-                <MudAutocomplete T="Companion" Label="Companion name" @bind-Value="_troop"
+                <MudAutocomplete T="CustomTroop" Label="Name" @bind-Value="_troop"
                                  SearchFunc="@Search" ToStringFunc="@(e => e?.Name)"
                                  ShowProgressIndicator="true"/>
-                <MudTextField @bind-Value="_troop.Name"
-                              For="@(() => _troop.Name)"
-                              Immediate="true"
-                              Label="Name"/>
 
                 <MudNumericField @bind-Value="_troop.Tier"
                                  For="@(() => _troop.Tier)"
@@ -178,9 +171,9 @@
         }
     }
 
-    private async Task<IEnumerable<Companion>?> Search(string? name)
+    private async Task<IEnumerable<CustomTroop>?> Search(string? name)
     {
-        return (await HttpClient.GetFromJsonAsync<List<Companion>>($"/Companions/Search/AuthorId/{_authorId}"))?
+        return (await HttpClient.GetFromJsonAsync<List<CustomTroop>>($"/CustomTroops/Search/AuthorId/{_authorId}"))?
             .Where(companion => companion.Name.Contains(name ?? "", StringComparison.OrdinalIgnoreCase));
     }
 
